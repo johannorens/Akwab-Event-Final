@@ -19,4 +19,9 @@ class Organisateur extends Model
         'email',
         'telephone'
     ];
+
+    public function evenements()
+    {
+        return $this->hasMany(Evenement::class, 'id_organisateur');
+    }
 }

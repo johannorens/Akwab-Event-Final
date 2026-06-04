@@ -18,4 +18,9 @@ class Type_ticket extends Model
         'prix',
         'quantite_type_ticket'
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'id_type_ticket');
+    }
 }

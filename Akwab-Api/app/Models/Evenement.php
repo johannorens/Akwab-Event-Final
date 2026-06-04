@@ -21,4 +21,30 @@ class Evenement extends Model
         'quantite_ticket_totale',
         'quantite_ticket_restante',
     ];
+
+    public function categories()
+    {
+        return $this->belongsTo(Categorie::class, 'id_categorie');
+    }
+
+    public function lieux()
+    {
+        return $this->belongsTo(Lieu::class, 'id_lieu');
+    }
+
+    public function organisateurs()
+    {
+        return $this->belongsTo(Organisateur::class, 'id_organisateur');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'id_evenement');
+    }
+
+    public function utilisateursAiment()
+    {
+        return $this->belongsToMany(Utilisateur::class, 'aimer', 'id_evenement', 'id_utilisateur');
+    }
+
 }
