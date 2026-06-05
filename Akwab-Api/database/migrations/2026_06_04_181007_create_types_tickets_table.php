@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_type_ticket');
             $table->string('libelle');
             $table->decimal('prix', 10, 2);
-            $table->integer('quantite_ticket_type');
+            $table->integer('quantite_type_ticket');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_tickets');
+        Schema::dropIfExists('types_tickets');
     }
 };

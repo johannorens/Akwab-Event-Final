@@ -9,7 +9,12 @@ class Type_ticket extends Model
 {
     use HasFactory;
 
-    protected $table = 'type_tikets';
+    protected static function newFactory()
+    {
+        return \Database\Factories\TypeTicketFactory::new();
+    }
+
+    protected $table = 'types_tickets';
 
     protected $primaryKey = 'id_type_ticket';
 

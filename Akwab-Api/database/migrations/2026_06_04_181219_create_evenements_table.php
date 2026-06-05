@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_evenement');
             $table->string('nom');
             $table->date('date');
-            $table->string('description');
+            $table->text('description');
             $table->string('image');
             $table->integer('quantite_ticket_totale');
             $table->integer('quantite_ticket_restante');
