@@ -15,7 +15,9 @@ class OrganisateurResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id_organisateur' => $this->id_organisateur,
             'nom' => $this->nom,
+            'description' => $this->description,
             'email' => $this->email,
             'adresse' => $this->adresse,
         ];
