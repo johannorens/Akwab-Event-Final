@@ -33,20 +33,20 @@ class Utilisateur extends Authenticatable
     }
 
 
-//     public function role()
-//     {
-//         return $this->belongsToMany(Role::class, 'possede', 'id_utilisateurs', 'id_role');
-//     }
+    public function role()
+    {
+        return $this->belongsToMany(Role::class, 'possede', 'id_utilisateurs', 'id_role');
+    }
 
 
-//     public function tickets()
-//     {
-//         return $this->hasMany(Ticket::class, 'id_utilisateurs');
-//     }
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'id_utilisateurs');
+    }
 
 
-//     public function evenementsAimes()
-//     {
-//         return $this->belongsToMany(Evenement::class, 'aimer', 'id_utilisateurs', 'id_evenement');
-//     }
-// }
+    public function evenementsAimes()
+    {
+        return $this->belongsToMany(Evenement::class, 'aimer', 'id_utilisateurs', 'id_evenement');
+    }
+}

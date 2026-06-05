@@ -18,8 +18,8 @@ class Lieu extends Model
         'adresse',
     ];
 
-    // public function evenements()
-    // {
-    //     return $this->belongsToMany(Evenement::class, 'derouler', 'id_lieu', 'id_evenement');
-    // }
+    public function evenements()
+    {
+        return $this->belongsToMany(Evenement::class, 'derouler', 'id_lieu', 'id_evenement');
+    }
 }

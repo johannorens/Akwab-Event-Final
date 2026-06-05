@@ -18,8 +18,8 @@ class Categorie extends Model
     ];
 
 
-    // public function evenements()
-    // {
-    //     return $this->belongsToMany(Evenement::class, 'appartenir', 'id_categorie', 'id_evenement');
-    // }
+    public function evenements()
+    {
+        return $this->belongsToMany(Evenement::class, 'appartenir', 'id_categorie', 'id_evenement');
+    }
 }

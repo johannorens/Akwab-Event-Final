@@ -35,14 +35,14 @@ class Ticket extends Model
     }
 
 
-    // public function evenements()
-    // {
-    //     return $this->belongsToMany(Evenement::class, 'concerner', 'id_ticket', 'id_evenement');
-    // }
+    public function evenements()
+    {
+        return $this->belongsToMany(Evenement::class, 'concerner', 'id_ticket', 'id_evenement');
+    }
 
-    // // Un ticket correspond à un type de ticket
-    // public function typeTicket()
-    // {
-    //     return $this->belongsToMany(TypeTicket::class, 'correspondre', 'id_ticket', 'id_type_ticket');
-    // }
+
+    public function typeTicket()
+    {
+        return $this->belongsToMany(Type_Ticket::class, 'correspondre', 'id_ticket', 'id_type_ticket');
+    }
 }
