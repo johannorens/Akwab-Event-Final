@@ -25,12 +25,14 @@ class EvenementResource extends JsonResource
 
             'categorie'  => $this->categorie->map(function ($categorie) {
                 return [
+                    'id_categorie' => $categorie->id_categorie,
                     'libelle' => $categorie->libelle
                 ];
             }),
 
             'lieu'  => $this->lieu->map(function ($lieu) {
                 return [
+                    'id_lieu' => $lieu->id_lieu,
                     'nom' => $lieu->nom,
                     'ville' => $lieu->ville,
                     'adresse' => $lieu->adresse,
@@ -39,6 +41,7 @@ class EvenementResource extends JsonResource
 
             'organisateur'  => $this->organisateur->map(function ($organisateur) {
                 return [
+                    'id_organisateur' => $organisateur->id_organisateur,
                     'nom' => $organisateur->nom,
                     'email' => $organisateur->email,
                     'adresse' => $organisateur->adresse,
