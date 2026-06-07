@@ -23,8 +23,8 @@ class UpdateCategorieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'libelle' => 'required|string|max:255|unique:categories,libelle,' . $this->categorie,
-            'image'   => 'required|string|max:255',
+            'libelle' => 'sometimes|string|max:255|unique:categories,libelle,' . $this->categorie . ',id_categorie',
+            'image'   => 'sometimes|string|max:255',
         ];
     }
 }
