@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategorieController;
 use App\Http\Controllers\Api\TypeTicketController;
 use Database\Factories\TypeTicketFactory;
+use App\Http\Controllers\Api\UtilisateurController;
 use App\Http\Controllers\Api\AuthController;
 
 // ROUTES PUBLIQUES
@@ -30,6 +31,8 @@ Route::get('/types-tickets/{id}', [TypeTicketController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('categories', CategorieController::class);
+    Route::get('/profile', [UtilisateurController::class, 'profile']);
+    Route::put('/profileupdate', [UtilisateurController::class, 'updateProfile']);
 
 
     // ROUTES ADMIN
@@ -37,9 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/organisateurs', OrganisateurController::class);
         Route::apiResource('/evenements', EvenementController::class)->except(['index', 'show']);
         Route::apiResource('/types-tickets', TypeTicketController::class)->except(['index', 'show']);
+        Route::apiResource('utilisateurs', UtilisateurController::class)->except(['store']);
     });
 });
-
-
-
-
