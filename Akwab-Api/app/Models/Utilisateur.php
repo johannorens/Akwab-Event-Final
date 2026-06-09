@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Utilisateur extends Authenticatable
 {
-    use HasFactory, Notifiable,HasApiTokens,SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
 
     protected $table = 'utilisateurs';
     protected $primaryKey = 'id_utilisateur';
@@ -38,18 +38,18 @@ class Utilisateur extends Authenticatable
 
     public function role()
     {
-        return $this->belongsToMany(Role::class, 'possede', 'id_utilisateurs', 'id_role');
+        return $this->belongsTo(Role::class, 'id_role', 'id_role');
     }
 
 
     public function tickets()
     {
-        return $this->hasMany(Ticket::class, 'id_utilisateurs');
+        return $this->hasMany(Ticket::class, 'id_utilisateur');
     }
 
 
     public function evenementsAimes()
     {
-        return $this->belongsToMany(Evenement::class, 'aimer', 'id_utilisateurs', 'id_evenement');
+        return $this->belongsToMany(Evenement::class, 'utilisateur_evenement', 'id_utilisateur', 'id_evenement');
     }
 }

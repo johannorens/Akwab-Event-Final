@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\UtilisateurController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\LieuController;
+use App\Http\Controllers\Api\AimerController;
 
 
 // ROUTES PUBLIQUES
@@ -42,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/mes-tickets', [TicketController::class, 'mesTickets']);
     Route::get('/tickets/{id}', [TicketController::class, 'show']);
     Route::post('/tickets', [TicketController::class, 'store']);
+    Route::post('/evenements/{id}/aimer', [AimerController::class, 'toggle']);
+    Route::get('/mes-evenements-aimes', [AimerController::class, 'mesEvenementsAimes']);
 
 
     // ROUTES ADMIN
@@ -54,5 +57,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/tickets/{id}', [TicketController::class, 'update']);
         Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);
         Route::apiResource('lieux', LieuController::class);
+        Route::get('/likes', [AimerController::class, 'index']);
     });
 });

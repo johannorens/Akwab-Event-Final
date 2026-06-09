@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Evenement extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'evenements';
 
@@ -50,5 +50,4 @@ class Evenement extends Model
     {
         return $this->belongsToMany(Utilisateur::class, 'utilisateur_evenement', 'id_evenement', 'id_utilisateur');
     }
-
 }
