@@ -22,14 +22,11 @@ class UpdateTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-          return [
-            'numero_ticket'      => 'sometimes|string|max:255|unique:tickets,numero_ticket,' . $this->ticket . ',id_ticket',
-            'prix_total'         => 'sometimes|numeric|min:0',
-            'date_reservation'   => 'sometimes|date',
-            'nombre_ticket_pris' => 'sometimes|integer|min:1',
-            'id_utilisateurs'    => 'sometimes|exists:utilisateurs,id_utilisateurs',
-            'id_evenement'       => 'sometimes|exists:evenements,id_evenement',
-            'id_type_ticket'     => 'sometimes|exists:type_tickets,id_type_ticket',
+        return [
+            'tickets'                      => 'sometimes|array|min:1',
+            'tickets.*.id_type_ticket'     => 'required_with:tickets|exists:type_tickets,id_type_ticket',
+            'tickets.*.nombre_ticket_pris' => 'required_with:tickets|integer|min:1',
+            'id_evenement'                 => 'sometimes|exists:evenements,id_evenement',
         ];
     }
 }

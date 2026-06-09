@@ -18,7 +18,9 @@ class Ticket extends Model
         'prix_total',
         'date_reservation',
         'nombre_ticket_pris',
-        'id_utilisateurs',
+        'id_utilisateur',
+        'id_evenement',
+        'id_type_ticket'
     ];
 
     protected function casts(): array
