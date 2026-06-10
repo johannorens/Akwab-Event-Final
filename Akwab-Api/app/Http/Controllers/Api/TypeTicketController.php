@@ -95,11 +95,11 @@ class TypeTicketController extends Controller
     {
         $typeTicket = Type_ticket::find($id);
 
-        if (!$typeTicket) {
+        if ($typeTicket->tickets()->count() > 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Type de ticket non trouvé',
-            ], 404);
+                'message' => 'Impossible de supprimer ce type — des tickets existent déjà.',
+            ], 422);
         }
 
         $typeTicket->delete();

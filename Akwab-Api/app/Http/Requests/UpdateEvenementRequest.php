@@ -33,10 +33,10 @@ class UpdateEvenementRequest extends FormRequest
             'id_lieu'             => 'sometimes|exists:lieux,id_lieu',
             'id_organisateur'             => 'sometimes|exists:organisateurs,id_organisateur',
 
-            'types_tickets'   => 'sometimes|array|size:2',
-            'types_tickets.*.id_type_ticket'   => 'sometimes|exists:type_tickets,id_type_ticket',
-            'types_tickets.*.total_ticket_evenement' => 'sometimes|integer|min:1',
-            'types_tickets.*.quantite_type_ticket'  => 'sometimes|integer|min:1',
+            // 'types_tickets'   => 'sometimes|array|size:2',
+            'id_type_ticket'   => 'sometimes|exists:types_tickets,id_type_ticket',
+            'total_ticket_evenement' => 'sometimes|integer|min:1',
+            'quantite_type_ticket'  => 'sometimes|integer|min:1',
         ];
     }
 

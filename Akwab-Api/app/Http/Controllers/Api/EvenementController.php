@@ -23,7 +23,7 @@ class EvenementController extends Controller
     {
         $page = $request->input('page', 1);
         $evenements = Cache::remember("evenements.tous.page.{$page}", 3600, function () {
-            return Evenement::with(['categories', 'lieux', 'organisateurs'])
+            return Evenement::with(['categories', 'lieux', 'organisateurs', 'types_tickets'])
                 ->withCount('utilisateursAiment')
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
@@ -49,14 +49,30 @@ class EvenementController extends Controller
             $data['image'] = $path;
         }
 
-        $evenement = Evenement::create($data);
-        $this->invalidateListeCache();
+        return DB::transaction(function () use ($data, $request) {
 
-        return response()->json([
-            'success' => true,
-            'evenement' => new EvenementResource($evenement),
-            'message' => 'Événement créé avec succès'
-        ], 201);
+            $evenement = Evenement::create($data);
+            $totalEvenement = array_sum(
+                array_column($request->types_tickets, 'quantite_type_ticket')
+            );
+            // dd($request->types_tickets);
+            foreach ($request->types_tickets as $type) {
+                //  dd($type);
+                $evenement->types_tickets()->attach($type['id_type_ticket'], [
+                    'total_ticket_evenement'   => $totalEvenement,
+                    'quantite_ticket_restante' => $type['quantite_type_ticket'],
+                    'quantite_type_ticket'     => $type['quantite_type_ticket'],
+                ]);
+            }
+
+            $this->invalidateListeCache();
+
+            return response()->json([
+                'success' => true,
+                'evenement' => new EvenementResource($evenement),
+                'message' => 'Événement créé avec succès'
+            ], 201);
+        });
     }
 
     /**
@@ -65,7 +81,7 @@ class EvenementController extends Controller
     public function show(string $id)
     {
         $evenement = Cache::remember("evenement.{$id}", 3600, function () use ($id) {
-            return Evenement::with(['categories', 'lieux', 'organisateurs'])
+            return Evenement::with(['categories', 'lieux', 'organisateurs', 'types_tickets'])
                 ->withCount('utilisateursAiment')
                 ->findOrFail($id);
         });
@@ -96,16 +112,33 @@ class EvenementController extends Controller
             $data['image'] = $path;
         }
 
-        $evenement->update($data);
+        return DB::transaction(function () use ($data, $request, $evenement, $id) {
+            $evenement->update($data);
+            $evenement->types_tickets()->detach();
 
-        Cache::forget("evenement.{$id}");
-        $this->invalidateListeCache();
+            if ($request->has('types_tickets')) {
+                $totalEvenement = array_sum(
+                    array_column($request->types_tickets, 'quantite_type_ticket')
+                );
+                foreach ($request->types_tickets as $type) {
+                    $evenement->types_tickets()->attach($type['id_type_ticket'], [
+                        'total_ticket_evenement'   => $totalEvenement,
+                        'quantite_ticket_restante' => $type['quantite_type_ticket'],
+                        'quantite_type_ticket'     => $type['quantite_type_ticket'],
+                    ]);
+                }
+            }
 
-        return response()->json([
-            'success' => true,
-            'evenement' => new EvenementResource($evenement->fresh()),
-            'message' => 'Événement mis à jour avec succès'
-        ], 200);
+
+            Cache::forget("evenement.{$id}");
+            $this->invalidateListeCache();
+
+            return response()->json([
+                'success' => true,
+                'evenement' => new EvenementResource($evenement->fresh()),
+                'message' => 'Événement mis à jour avec succès'
+            ], 200);
+        });
     }
 
     /**

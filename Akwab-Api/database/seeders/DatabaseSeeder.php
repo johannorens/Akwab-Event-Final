@@ -36,20 +36,23 @@ class DatabaseSeeder extends Seeder
         $evenements = Evenement::factory(10)->create();
 
         $typesTickets = Type_ticket::all();
-        $quantites = [
-            'VIP' => fake()->numberBetween(50, 500),
-            'Standard' => fake()->numberBetween(200, 1000),
-        ];
-        $totalEvenement = array_sum($quantites);
+
         foreach ($evenements as $evenement) {
+
+            $quantites = [
+                'VIP' => fake()->numberBetween(50, 500),
+                'GRAND PUBLIC' => fake()->numberBetween(200, 1000),
+            ];
+            $totalEvenement = array_sum($quantites);
             foreach ($typesTickets as $type) {
-                $quantite = $quantites[$type->libelle] ?? 100;
+                $quantite = $quantites[$type->libelle];
+                $restant = $totalEvenement - $quantite;
 
                 $evenement->types_tickets()->attach(
                     $type->id_type_ticket,
                     [
                         'total_ticket_evenement'   => $totalEvenement,
-                        'quantite_ticket_restante' => $quantite,
+                        'quantite_ticket_restante' => $restant,
                         'quantite_type_ticket'     => $quantite,
                     ]
                 );

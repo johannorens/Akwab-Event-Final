@@ -31,12 +31,11 @@ class Type_ticket extends Model
 
     public function evenements()
     {
-        return $this->belongsToMany(Evenement::class, 'evenement_type_ticket', 'id_evenement', 'id_type_ticket')
+        return $this->belongsToMany(Evenement::class, 'evenement_type_ticket', 'id_type_ticket', 'id_evenement')
             ->withPivot([
                 'total_ticket_evenement',
                 'quantite_ticket_restante',
                 'quantite_type_ticket'
-            ])
-            ->withTimestamps();
+            ]);
     }
 }
