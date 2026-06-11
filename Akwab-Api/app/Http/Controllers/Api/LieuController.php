@@ -8,6 +8,8 @@ use App\Http\Requests\StoreLieuRequest;
 use App\Http\Requests\UpdateLieuRequest;
 use App\Http\Resources\LieuResource;
 use App\Models\Lieu;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class LieuController extends Controller
 {
@@ -16,7 +18,9 @@ class LieuController extends Controller
      */
     public function index()
     {
-        $lieux = Lieu::all();
+        $lieux = Cache::remember('lieux.tous', 3600, function () {
+            return Lieu::all();
+        });
 
         return response()->json([
             'success' => true,
@@ -30,6 +34,7 @@ class LieuController extends Controller
     public function store(StoreLieuRequest $request)
     {
         $lieu = Lieu::create($request->validated());
+        $this->invalidateListeCache();
 
         return response()->json([
             'success' => true,
@@ -43,7 +48,9 @@ class LieuController extends Controller
      */
     public function show($id)
     {
-        $lieu = Lieu::find($id);
+        $lieu = Cache::remember("lieu.{$id}", 3600, function () use ($id) {
+            return Lieu::find($id);
+        });
 
         if (!$lieu) {
             return response()->json([
@@ -73,6 +80,9 @@ class LieuController extends Controller
 
         $lieu->update($request->validated());
 
+        Cache::forget("lieu.{$id}");
+        $this->invalidateListeCache();
+
         return response()->json([
             'success' => true,
             'message' => 'Lieu mis à jour avec succès',
@@ -95,10 +105,19 @@ class LieuController extends Controller
         }
 
         $lieu->delete();
+        Cache::forget("lieu.{$id}");
+        $this->invalidateListeCache();
 
         return response()->json([
             'success' => true,
             'message' => 'Lieu supprimé avec succès',
         ]);
+    }
+
+    private function invalidateListeCache(): void
+    {
+        DB::table('cache')
+            ->where('key', 'LIKE', '%lieux.tous%')
+            ->delete();
     }
 }
