@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Image/logo.png";
-import AuthLayout from "../AuthLayout";
+import AuthLayout from "./AuthLayout";
 
 function getPasswordStrength(password) {
   if (password.length === 0) return null;
@@ -27,13 +27,13 @@ export default function Register() {
     prenoms: "",
     email: "",
     telephone: "",
-    password: "",
-    password_confirmation: "",
+    mot_de_passe: "",
+    mot_de_passe_confirmation: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const strength = getPasswordStrength(form.password);
+  const strength = getPasswordStrength(form.mot_de_passe);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,7 +41,7 @@ export default function Register() {
 
   async function handleSubmit() {
     setError("");
-    if (form.password !== form.password_confirmation) {
+    if (form.mot_de_passe !== form.mot_de_passe_confirmation) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
@@ -59,7 +59,8 @@ export default function Register() {
       const data = await res.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        navigate("/home");
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/login");
       } else {
         const msgs = data.errors
           ? Object.values(data.errors).flat().join(" ")
@@ -91,6 +92,7 @@ export default function Register() {
           onChange={handleChange}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
+
         <input
           name="prenoms"
           type="text"
@@ -99,6 +101,7 @@ export default function Register() {
           onChange={handleChange}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
+
         <input
           name="email"
           type="email"
@@ -107,6 +110,7 @@ export default function Register() {
           onChange={handleChange}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
+
         <input
           name="telephone"
           type="tel"
@@ -116,13 +120,12 @@ export default function Register() {
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
-        {/* Mot de passe + barre de force */}
         <div className="flex flex-col gap-1">
           <input
-            name="password"
+            name="mot_de_passe"
             type="password"
             placeholder="Mot de passe"
-            value={form.password}
+            value={form.mot_de_passe}
             onChange={handleChange}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
           />
@@ -151,10 +154,10 @@ export default function Register() {
         </div>
 
         <input
-          name="password_confirmation"
+          name="mot_de_passe_confirmation"
           type="password"
           placeholder="Confirmer le mot de passe"
-          value={form.password_confirmation}
+          value={form.mot_de_passe_confirmation}
           onChange={handleChange}
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />

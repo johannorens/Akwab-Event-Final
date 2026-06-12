@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Image/logo.png";
-import AuthLayout from "../AuthLayout";
+import AuthLayout from "./AuthLayout";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function Login() {
         if (data.user.id_role === 1) {
           navigate("/dashboard");
         } else {
-          navigate("/home");
+          navigate("/header");
         }
       } else {
         setError(data.message || "Email ou mot de passe incorrect.");
