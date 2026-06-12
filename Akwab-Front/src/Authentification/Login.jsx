@@ -10,22 +10,31 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit() {
+  async function handleSubmit(e) {
+    e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const res = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, mot_de_passe: motDePasse }),
+        body: JSON.stringify({
+          email: email,
+          mot_de_passe: motDePasse,
+        }),
       });
+
       const data = await res.json();
+
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
+        console.log("user:", data.user); // ajoute ça
+        console.log("id_role:", data.user.id_role, typeof data.user.id_role); // et ça
 
         if (data.user.id_role === 1) {
-          navigate("/dashboard");
+          navigate("/Dashboard");
         } else {
           navigate("/header");
         }
@@ -56,12 +65,14 @@ export default function Login() {
         <p className="text-red-500 text-xs text-center w-full">{error}</p>
       )}
 
-      <div className="w-full flex flex-col gap-3">
+      {/* Utilisation d'une balise form pour une meilleure gestion de la soumission */}
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
@@ -70,13 +81,14 @@ export default function Login() {
           placeholder="Mot de passe"
           value={motDePasse}
           onChange={(e) => setMotDePasse(e.target.value)}
+          required
           className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
 
         <div className="flex items-center justify-between text-xs text-gray-400">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" className="accent-purple-500" /> Se souvenir
-            de moi
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" className="accent-purple-500" />
+            Se souvenir de moi
           </label>
           <Link to="/forgot-password" className="text-purple-500 font-medium">
             Mot de passe oublié ?
@@ -84,13 +96,13 @@ export default function Login() {
         </div>
 
         <button
-          onClick={handleSubmit}
+          type="submit"
           disabled={loading}
           className="w-full py-3 rounded-xl bg-purple-500 hover:bg-purple-600 text-white text-sm font-semibold transition-all active:scale-[0.98] disabled:opacity-60"
         >
           {loading ? "Connexion..." : "Se connecter"}
         </button>
-      </div>
+      </form>
 
       <p className="text-sm text-gray-400">
         Vous n'avez pas de compte ?{" "}
