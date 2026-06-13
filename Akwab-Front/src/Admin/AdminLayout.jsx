@@ -19,21 +19,27 @@ function AdminLayout() {
         <nav className="flex flex-col items-center gap-6 w-full mt-4">
           {[
             { label: "Utilisateurs", path: "/dashboard/utilisateurs" },
+            { label: "Organisateurs", path: "/dashboard/organisateurs" },
             { label: "Evènements", path: "/dashboard/evenements" },
             { label: "Catégories", path: "/dashboard/categories" },
             { label: "Lieu", path: "/dashboard/lieux" },
             { label: "Gains", path: "/dashboard/gains" },
             { label: "Evènement en tendance", path: "/dashboard" },
-          ].map(item => (
-            <Link key={item.path} to={item.path}
-              className="text-white text-sm font-medium hover:text-purple-900 transition-colors text-center px-2">
+          ].map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="text-white text-sm font-medium hover:text-purple-900 transition-colors text-center px-2"
+            >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <button onClick={handleLogout}
-          className="mt-auto mb-4 w-28 py-2 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all">
+        <button
+          onClick={handleLogout}
+          className="mt-auto mb-4 w-28 py-2 rounded-lg bg-purple-700 hover:bg-purple-800 text-white text-xs font-semibold transition-all"
+        >
           Déconnexion
         </button>
       </aside>
@@ -46,4 +52,4 @@ function AdminLayout() {
   );
 }
 
-export default  AdminLayout;
+export default AdminLayout;
