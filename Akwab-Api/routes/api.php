@@ -31,13 +31,16 @@ Route::get('/types-tickets/{id}', [TypeTicketController::class, 'show']);
 Route::get('/lieux', [LieuController::class, 'index']);
 Route::get('/lieux/{id}', [LieuController::class, 'show']);
 
+Route::get('/categories', [CategorieController::class, 'index']);
+Route::get('/categories/{id}', [CategorieController::class, 'show']);
+
 
 
 // ROUTES PROTÉGÉES(utilisateurs connectés)
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('categories', CategorieController::class);
+    Route::apiResource('categories', CategorieController::class)->except(['index', 'show']) ;
     Route::get('/profile', [UtilisateurController::class, 'profile']);
     Route::put('/profileupdate', [UtilisateurController::class, 'updateProfile']);
     Route::get('/mes-tickets', [TicketController::class, 'mesTickets']);
