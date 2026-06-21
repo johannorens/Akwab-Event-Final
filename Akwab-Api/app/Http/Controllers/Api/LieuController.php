@@ -16,15 +16,36 @@ class LieuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $lieux = Cache::remember('lieux.tous', 3600, function () {
-            return Lieu::all();
+        $page = $request->input('page', 1);
+        $search = $request->input('search', '');
+        $perPage = 10;
+
+        $cacheKey = "lieux.page.{$page}.search." . md5($search);
+
+        $lieux = Cache::remember($cacheKey, 3600, function () use ($search, $perPage) {
+            $query = Lieu::query();
+
+            if (!empty($search)) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('nom', 'like', '%' . $search . '%')
+                        ->orWhere('ville', 'like', '%' . $search . '%')
+                        ->orWhere('adresse', 'like', '%' . $search . '%');
+                });
+            }
+
+            return $query->orderBy('nom')->paginate($perPage);
         });
 
         return response()->json([
             'success' => true,
             'data'    => LieuResource::collection($lieux),
+            'meta'    => [
+                'current_page' => $lieux->currentPage(),
+                'last_page'    => $lieux->lastPage(),
+                'total'        => $lieux->total(),
+            ],
         ]);
     }
 
@@ -117,7 +138,7 @@ class LieuController extends Controller
     private function invalidateListeCache(): void
     {
         DB::table('cache')
-            ->where('key', 'LIKE', '%lieux.tous%')
+            ->where('key', 'LIKE', '%lieux.page.%')
             ->delete();
     }
 }
