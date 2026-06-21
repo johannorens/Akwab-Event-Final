@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\LieuController;
 use App\Http\Controllers\Api\AimerController;
 
 
+
 // ROUTES PUBLIQUES
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/register/organisateur', [AuthController::class, 'registerOrganisateur']);
@@ -61,5 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/tickets/{id}', [TicketController::class, 'destroy']);
         Route::apiResource('lieux', LieuController::class);
         Route::get('/likes', [AimerController::class, 'index']);
+        Route::apiResource('/organisateurs', OrganisateurController::class);
     });
 });

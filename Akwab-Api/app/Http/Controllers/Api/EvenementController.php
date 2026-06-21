@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use App\Models\Ticket;
+use App\Models\EvenementTypeTicket;
+use App\Models\Type_ticket;
+use Illuminate\Support\Facades\Log;
 
 class EvenementController extends Controller
 {
@@ -22,12 +26,22 @@ class EvenementController extends Controller
     public function index(Request $request)
     {
         $page = $request->input('page', 1);
-        $evenements = Cache::remember("evenements.tous.page.{$page}", 3600, function () {
-            return Evenement::with(['categories', 'lieux', 'organisateurs', 'types_tickets'])
+        $search = $request->input('search', '');
+        $perPage = 10;
+        $cacheKey = "evenements.page.{$page}.search." . md5($search);
+
+        $evenements = Cache::remember($cacheKey, 3600, function () use ($search, $perPage) {
+            $query = Evenement::with(['categories', 'lieux', 'organisateurs', 'types_tickets'])
                 ->withCount('utilisateursAiment')
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->orderBy('created_at', 'desc');
+
+            if (!empty($search)) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            }
+
+            return $query->paginate($perPage);
         });
+
         return EvenementResource::collection($evenements)->response()->getData(true);
     }
 
@@ -49,28 +63,38 @@ class EvenementController extends Controller
             $data['image'] = $path;
         }
 
-        return DB::transaction(function () use ($data, $request) {
+        return DB::transaction(function () use ($data) {
+            $evenement = Evenement::create([
+                'nom'             => $data['nom'],
+                'date'            => $data['date'],
+                'description'     => $data['description'],
+                'image'           => $data['image'] ?? null,
+                'id_categorie'    => $data['id_categorie'],
+                'id_lieu'         => $data['id_lieu'],
+                'id_organisateur' => $data['id_organisateur'],
+            ]);
 
-            $evenement = Evenement::create($data);
-            $totalEvenement = array_sum(
-                array_column($request->types_tickets, 'quantite_type_ticket')
-            );
-            // dd($request->types_tickets);
-            foreach ($request->types_tickets as $type) {
-                //  dd($type);
-                $evenement->types_tickets()->attach($type['id_type_ticket'], [
-                    'total_ticket_evenement'   => $totalEvenement,
-                    'quantite_ticket_restante' => $type['quantite_type_ticket'],
-                    'quantite_type_ticket'     => $type['quantite_type_ticket'],
+            $totalTickets = collect($data['tickets'])->sum('quantite_type_ticket');
+
+            foreach ($data['tickets'] as $ticket) {
+                $typeTicket = Type_ticket::create([
+                    'libelle'     => $ticket['libelle'],
+                    'prix_ticket' => $ticket['prix_ticket'],
+                ]);
+
+                $evenement->types_tickets()->attach($typeTicket->id_type_ticket, [
+                    'total_ticket_evenement'   => $ticket['quantite_type_ticket'],
+                    'quantite_type_ticket'     => $ticket['quantite_type_ticket'],
+                    'quantite_ticket_restante' => $ticket['quantite_type_ticket'],
                 ]);
             }
 
             $this->invalidateListeCache();
 
             return response()->json([
-                'success' => true,
-                'evenement' => new EvenementResource($evenement),
-                'message' => 'Événement créé avec succès'
+                'success'   => true,
+                'evenement' => new EvenementResource($evenement->load('types_tickets')),
+                'message'   => 'Événement créé avec succès'
             ], 201);
         });
     }
@@ -86,18 +110,19 @@ class EvenementController extends Controller
                 ->findOrFail($id);
         });
 
-        return new EvenementResource($evenement);
-    }
+        $gains = Ticket::where('id_evenement', $id)->sum('prix_total');
 
+        return (new EvenementResource($evenement))
+            ->additional(['gains_total' => $gains]);
+    }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateEvenementRequest $request, string $id)
     {
+        Log::info('DEBUG UPDATE', $request->all());
         $evenement = Evenement::findOrFail($id);
-
         $data = $request->validated();
-
         if ($request->hasFile('image')) {
             if ($evenement->image) {
                 Storage::disk('public')->delete($evenement->image);
@@ -113,31 +138,58 @@ class EvenementController extends Controller
         }
 
         return DB::transaction(function () use ($data, $request, $evenement, $id) {
-            $evenement->update($data);
-            $evenement->types_tickets()->detach();
+            $evenement->update(collect($data)->except('tickets')->toArray());
 
-            if ($request->has('types_tickets')) {
-                $totalEvenement = array_sum(
-                    array_column($request->types_tickets, 'quantite_type_ticket')
-                );
-                foreach ($request->types_tickets as $type) {
-                    $evenement->types_tickets()->attach($type['id_type_ticket'], [
-                        'total_ticket_evenement'   => $totalEvenement,
-                        'quantite_ticket_restante' => $type['quantite_type_ticket'],
-                        'quantite_type_ticket'     => $type['quantite_type_ticket'],
-                    ]);
+            if (!empty($data['tickets'])) {
+                $totalTickets = collect($data['tickets'])->sum('quantite_type_ticket');
+                $idsEnvoyes = [];
+
+                foreach ($data['tickets'] as $ticket) {
+                    if (!empty($ticket['id_type_ticket'])) {
+                        // Ticket existant → update
+                        $typeTicket = Type_ticket::findOrFail($ticket['id_type_ticket']);
+                        $typeTicket->update([
+                            'libelle'     => $ticket['libelle'],
+                            'prix_ticket' => $ticket['prix_ticket'],
+                        ]);
+
+                        $evenement->types_tickets()->updateExistingPivot($ticket['id_type_ticket'], [
+                            'total_ticket_evenement'   => $ticket['quantite_type_ticket'],
+                            'quantite_type_ticket'     => $ticket['quantite_type_ticket'],
+                            'quantite_ticket_restante' => $ticket['quantite_type_ticket'],
+                        ]);
+
+                        $idsEnvoyes[] = $ticket['id_type_ticket'];
+                    } else {
+                        // Nouveau ticket → create + attach
+                        $typeTicket = Type_ticket::create([
+                            'libelle'     => $ticket['libelle'],
+                            'prix_ticket' => $ticket['prix_ticket'],
+                        ]);
+
+                        $evenement->types_tickets()->attach($typeTicket->id_type_ticket, [
+                            'total_ticket_evenement'   => $ticket['quantite_type_ticket'],
+                            'quantite_type_ticket'     => $ticket['quantite_type_ticket'],
+                            'quantite_ticket_restante' => $ticket['quantite_type_ticket'],
+                        ]);
+
+                        $idsEnvoyes[] = $typeTicket->id_type_ticket;
+                    }
                 }
-            }
 
+                $evenement->types_tickets()
+                    ->wherePivotNotIn('id_type_ticket', $idsEnvoyes)
+                    ->detach();
+            }
 
             Cache::forget("evenement.{$id}");
             $this->invalidateListeCache();
 
             return response()->json([
-                'success' => true,
-                'evenement' => new EvenementResource($evenement->fresh()),
-                'message' => 'Événement mis à jour avec succès'
-            ], 200);
+                'success'   => true,
+                'evenement' => new EvenementResource($evenement->fresh(['types_tickets'])),
+                'message'   => 'Événement mis à jour avec succès'
+            ]);
         });
     }
 
