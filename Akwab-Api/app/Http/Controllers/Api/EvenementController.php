@@ -218,7 +218,7 @@ class EvenementController extends Controller
     private function invalidateListeCache(): void
     {
         DB::table('cache')
-            ->where('key', 'LIKE', '%evenements.tous.page%')
+            ->where('key', 'LIKE', '%evenements.page.%')
             ->delete();
     }
 }

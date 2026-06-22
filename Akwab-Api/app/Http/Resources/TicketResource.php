@@ -11,8 +11,7 @@ class TicketResource extends JsonResource
      * Transform the resource collection into an array.
      *
      * @return array<int|string, mixed>
-     */
-    public function toArray(Request $request): array
+     */ public function toArray(Request $request): array
     {
         return [
             'id'                 => $this->id_ticket,
@@ -20,9 +19,16 @@ class TicketResource extends JsonResource
             'prix_total'         => $this->prix_total,
             'date_reservation'   => $this->date_reservation?->toDateTimeString(),
             'nombre_ticket_pris' => $this->nombre_ticket_pris,
-            'id_utilisateurs'    => $this->id_utilisateurs,
+
+
+            'id_utilisateur'     => $this->id_utilisateur,
             'id_evenement'       => $this->id_evenement,
             'id_type_ticket'     => $this->id_type_ticket,
+
+
+            'utilisateur' => $this->whenLoaded('utilisateur'),
+            'type_ticket' => $this->whenLoaded('typeTicket'),
+            'evenement'   => $this->whenLoaded('evenement'),
         ];
     }
 }

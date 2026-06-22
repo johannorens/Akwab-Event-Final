@@ -18,7 +18,7 @@ export default function ShowTicket() {
 
   const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
 
-  // Charger les infos de l'événement
+
   useEffect(() => {
     async function loadEvenement() {
       setLoadingEv(true);
@@ -138,9 +138,9 @@ export default function ShowTicket() {
         </div>
       </div>
 
-      {/* Cartes récapitulatives */}
+  
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-purple-600 to-[#4D027A] rounded-xl p-5 text-white">
+        <div className="bg-linear-to-br from-purple-600 to-[#4D027A] rounded-xl p-5 text-white">
           <p className="text-xs text-purple-200 uppercase tracking-wide font-medium mb-1">
             Gains totaux
           </p>
@@ -174,7 +174,7 @@ export default function ShowTicket() {
         </div>
       </div>
 
-      {/* Types de tickets */}
+     
       {evenement?.types_tickets?.length > 0 && (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
@@ -230,7 +230,7 @@ export default function ShowTicket() {
         </div>
       )}
 
-      {/* Liste des acheteurs */}
+     
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-gray-700">
@@ -266,7 +266,7 @@ export default function ShowTicket() {
                       Qté
                     </th>
                     <th className="px-5 py-3 text-xs text-gray-500 font-medium uppercase tracking-wide text-right">
-                      Montant
+                      Montant Payé
                     </th>
                     <th className="px-5 py-3 text-xs text-gray-500 font-medium uppercase tracking-wide">
                       Date
@@ -310,7 +310,6 @@ export default function ShowTicket() {
               </table>
             </div>
 
-            {/* Cartes mobile */}
             <div className="flex flex-col gap-3 md:hidden">
               {tickets.map((t) => (
                 <div
@@ -346,7 +345,6 @@ export default function ShowTicket() {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center sm:justify-end gap-2 pt-4 border-t border-gray-100">
                 <button

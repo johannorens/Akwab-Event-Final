@@ -23,6 +23,14 @@ import ShowEvenement from "./Admin/Evenements/ShowEvenement";
 import UpdateEvenement from "./Admin/Evenements/UpdateEvenement";
 import CreateEvenement from "./Admin/Evenements/CreateEvenement";
 
+import ListTicket from "./Admin/Tickets/ListTickets";
+import ShowTicket from "./Admin/Tickets/ShowTicket";
+
+import CreateLieux from "./Admin/Lieux/CreateLieux";
+import ListLieux from "./Admin/Lieux/ListLieux";
+import ShowLieux  from "./Admin/Lieux/ShowLieux";
+import  UpdateLieux from "./Admin/Lieux/UpdateLieux"
+
 function App() {
   return (
     <BrowserRouter>
@@ -63,6 +71,15 @@ function App() {
           <Route path="evenements/create" element={<CreateEvenement />} />
           <Route path="evenements/:id" element={<ShowEvenement />} />
           <Route path="evenements/:id/edit" element={<UpdateEvenement />} />
+
+           <Route path="lieux" element={<ListLieux />} />
+          <Route path="lieux/create" element={<CreateLieux />} />
+          <Route path="lieux/:id" element={<ShowLieux />} />
+          <Route path="lieux/:id/edit" element={<UpdateLieux />} />
+
+
+          <Route path="tickets" element={<ListTicket />} />
+          <Route path="tickets/:id" element={<ShowTicket />} />
         </Route>
       </Routes>
     </BrowserRouter>

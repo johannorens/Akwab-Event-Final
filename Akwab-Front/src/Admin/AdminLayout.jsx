@@ -23,7 +23,7 @@ function AdminLayout() {
             { label: "Evènements", path: "/dashboard/evenements" },
             { label: "Catégories", path: "/dashboard/categories" },
             { label: "Lieu", path: "/dashboard/lieux" },
-            { label: "Gains", path: "/dashboard/gains" },
+            { label: "Tickets", path: "/dashboard/tickets" },
             { label: "Evènement en tendance", path: "/dashboard" },
           ].map((item) => (
             <Link

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'tickets';
     protected $primaryKey = 'id_ticket';
@@ -31,21 +31,31 @@ class Ticket extends Model
         ];
     }
 
-
     public function utilisateur()
     {
-        return $this->belongsTo(User::class, 'id_utilisateurs');
+        return $this->belongsTo(
+            Utilisateur::class,
+            'id_utilisateur',
+            'id_utilisateur'
+        );
     }
 
-
-    public function evenements()
+    public function evenement()
     {
-        return $this->belongsToMany(Evenement::class, 'concerner', 'id_ticket', 'id_evenement');
+        return $this->belongsTo(
+            Evenement::class,
+            'id_evenement',
+            'id_evenement'
+        );
     }
 
 
     public function typeTicket()
     {
-        return $this->belongsToMany(Type_Ticket::class, 'correspondre', 'id_ticket', 'id_type_ticket');
+        return $this->belongsTo(
+            Type_Ticket::class,
+            'id_type_ticket',
+            'id_type_ticket'
+        );
     }
 }

@@ -12,6 +12,7 @@ use App\Models\Type_ticket;
 use App\Models\Evenement;
 
 
+
 class TicketController extends Controller
 {
     /**
@@ -19,7 +20,11 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
+        $tickets = Ticket::with([
+            'utilisateur',
+            'typeTicket',
+            'evenement'
+        ])->get();
 
         return response()->json([
             'success' => true,
@@ -113,7 +118,11 @@ class TicketController extends Controller
      */
     public function show($id)
     {
-        $ticket = Ticket::find($id);
+        $ticket = Ticket::with([
+            'utilisateur',
+            'typeTicket',
+            'evenement'
+        ])->find($id);
 
         if (!$ticket) {
             return response()->json([
