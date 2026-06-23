@@ -47,7 +47,7 @@ export default function Login() {
         if (data.user.id_role === 1) {
           navigate("/Admin/Dashboard"); 
         } else {
-          navigate("/header");
+          navigate("/accueil");
         }
       } else {
         setError(data.message || "Email ou mot de passe incorrect.");

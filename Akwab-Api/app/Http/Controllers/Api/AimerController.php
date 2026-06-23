@@ -47,7 +47,14 @@ class AimerController extends Controller
 
     public function mesEvenementsAimes(Request $request)
     {
-        $evenements = $request->user()->evenementsAimes()->get();
+        $evenements = $request->user()
+            ->evenementsAimes()
+            ->with([
+                'lieux',
+                'organisateurs',
+                'types_tickets'
+            ])
+            ->get();
 
         return response()->json([
             'success' => true,

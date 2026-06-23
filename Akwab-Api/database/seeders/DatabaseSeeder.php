@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
 
         $evenements = Evenement::factory(10)->create();
 
+        Type_ticket::factory()->count(2)->create();
         $typesTickets = Type_ticket::all();
 
         foreach ($evenements as $evenement) {

@@ -34,6 +34,9 @@ Route::get('/categories/{id}', [CategorieController::class, 'show']);
 Route::get('/categories', [CategorieController::class, 'index']);
 Route::get('/categories/{id}', [CategorieController::class, 'show']);
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+
 
 
 // ROUTES PROTÉGÉES(utilisateurs connectés)

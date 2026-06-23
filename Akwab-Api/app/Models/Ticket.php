@@ -33,11 +33,7 @@ class Ticket extends Model
 
     public function utilisateur()
     {
-        return $this->belongsTo(
-            Utilisateur::class,
-            'id_utilisateur',
-            'id_utilisateur'
-        );
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur', 'id_utilisateur');
     }
 
     public function evenement()

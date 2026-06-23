@@ -7,10 +7,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Utilisateur extends Authenticatable
+class Utilisateur extends Authenticatable implements CanResetPasswordContract
 {
-    use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
+    use HasFactory, Notifiable, HasApiTokens, CanResetPassword, SoftDeletes;
 
     protected $table = 'utilisateurs';
     protected $primaryKey = 'id_utilisateur';
@@ -33,6 +35,19 @@ class Utilisateur extends Authenticatable
         return [
             'mot_de_passe' => 'hashed',
         ];
+    }
+
+
+    public function getAuthPassword()
+    {
+        return $this->mot_de_passe;
+    }
+
+
+    public function sendPasswordResetNotification($token)
+    {
+        $url = "http://localhost:5173/reset-password?token={$token}&email={$this->email}";
+        $this->notify(new \App\Notifications\CustomResetPassword($url));
     }
 
 

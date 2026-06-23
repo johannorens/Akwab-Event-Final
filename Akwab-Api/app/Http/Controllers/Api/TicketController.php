@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Http\Resources\TicketResource;
+use App\Mail\TicketPaymentConfirmation;
 use App\Models\Ticket;
 use App\Models\Type_ticket;
 use App\Models\Evenement;
-
+use Illuminate\Support\Facades\Mail;
 
 
 class TicketController extends Controller
@@ -51,7 +52,10 @@ class TicketController extends Controller
 
     public function mesTickets(Request $request)
     {
-        $tickets = Ticket::where('id_utilisateur', $request->user()->id_utilisateur)->get();
+        $tickets = Ticket::with(['evenement.lieux', 'evenement.organisateurs', 'typeTicket'])
+            ->where('id_utilisateur', $request->user()->id_utilisateur)
+            ->orderBy('date_reservation', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -77,7 +81,7 @@ class TicketController extends Controller
         }
 
         foreach ($request->tickets as $item) {
-            $typeTicket = $evenement->typeTickets()
+            $typeTicket = $evenement->types_tickets()
                 ->where('types_tickets.id_type_ticket', $item['id_type_ticket'])
                 ->first();
 
@@ -108,15 +112,23 @@ class TicketController extends Controller
             'date_reservation'   => now(),
             'nombre_ticket_pris' => $nombreTotal,
             'prix_total'         => $prixTotal,
+
         ]);
+
+        $ticket->load(['evenement', 'typeTicket']);
+
+        $user = $request->user();
+
+        Mail::to($user->email)
+            ->send(new TicketPaymentConfirmation($ticket));
 
 
         foreach ($request->tickets as $item) {
-            $typeTicket = $evenement->typeTickets()
+            $typeTicket = $evenement->types_tickets()
                 ->where('types_tickets.id_type_ticket', $item['id_type_ticket'])
                 ->first();
 
-            $evenement->typeTickets()->updateExistingPivot(
+            $evenement->types_tickets()->updateExistingPivot(
                 $item['id_type_ticket'],
                 [
                     'quantite_ticket_restante' => $typeTicket->pivot->quantite_ticket_restante - $item['nombre_ticket_pris'],
@@ -133,13 +145,16 @@ class TicketController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
         $ticket = Ticket::with([
             'utilisateur',
             'typeTicket',
-            'evenement'
+            'evenement',
+            'evenement.lieux',
+            'evenement.organisateurs',
         ])->find($id);
+
 
         if (!$ticket) {
             return response()->json([
@@ -157,7 +172,7 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, $id)
+    public function update(UpdateTicketRequest $request, string  $id)
     {
         $ticket = Ticket::find($id);
 
@@ -196,7 +211,7 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $ticket = Ticket::find($id);
 

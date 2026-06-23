@@ -15,7 +15,7 @@ class CategorieResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'      => $this->id_categorie,
+            'id_categorie'      => $this->id_categorie,
             'libelle' => $this->libelle,
             'image'   => $this->image
             ? asset('storage/' . $this->image)

@@ -5,8 +5,8 @@ function UtilisateurLayout() {
     return (
         <HeaderLayout>
             <main>
-            <Outlet/>
-        </main>
+                <Outlet />
+            </main>
         </HeaderLayout >
     );
 

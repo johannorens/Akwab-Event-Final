@@ -11,13 +11,23 @@ import AdminLayout from "./Admin/adminLayout";
 import Dashboard from "./Admin/dashboard";
 
 import ListUtilisateur from "./Admin/Utilisateurs/ListUtilisateur";
-import UpdateUtilisateur from "./Admin/Utilisateurs/UpdateUtilisateur";
+// import UpdateUtilisateur from "./Admin/Utilisateurs/UpdateUtilisateur";
 import ShowUtilisateur from "./Admin/Utilisateurs/ShowUtilisateur";
 
 import ListOrganisateur from "./Admin/Organisateurs/ListOrganisateur";
 import ShowOrganisateur from "./Admin/Organisateurs/ShowOrganisateur";
 import CreateOrganisateur from "./Admin/Organisateurs/CreateOrganisateur";
 import UpdateOrganisateur from "./Admin/Organisateurs/UpdateOrganisateur";
+import Accueil from "./Utilisateurs/Accueil";
+import Favoris from "./Utilisateurs/Favoris/Favoris";
+import TousEvenements from "./Utilisateurs/Evenements/TousEvenements";
+import DetailEvenement from "./Utilisateurs/Evenements/DetailEvenement";
+import Paiement from "./Utilisateurs/Paiements/Paiement";
+import DetailTicket from "./Utilisateurs/Paiements/DetailTicket";
+import HistoriqueTicket from "./Utilisateurs/Paiements/HistoriqueTickets";
+import DetailCategorie from "./Utilisateurs/Categories/DetailCategorie";
+import UpdateProfil from "./Utilisateurs/Profil/UpdateProfil";
+import VueProfil from "./Utilisateurs/Profil/VueProfil";
 
 import ListEvenements from "./Admin/Evenements/ListEvenement";
 import ShowEvenement from "./Admin/Evenements/ShowEvenement";
@@ -49,49 +59,64 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/header" element={<UtilisateurLayout />} />
 
-        <Route
-          path="/utilisateurs/:id/update"
-          element={<UpdateUtilisateur />}
-        />
+        {/* <Route path="/utilisateurs/:id/update" element={<UpdateUtilisateur />}/> */}
 
         {/* Routes protégées */}
-        <Route element={<PrivateRoute />}>
-          <Route path="/Admin" element={<AdminLayout />}>
-            <Route index path="Dashboard" element={<Dashboard />} />
+          <Route path="/accueil" element={<Accueil />} />
 
-            <Route path="utilisateurs" element={<ListUtilisateur />} />
-            <Route path="utilisateurs/:id" element={<ShowUtilisateur />} />
+          <Route path="/categorie/:id" element={<DetailCategorie />} />
 
-            <Route path="organisateurs" element={<ListOrganisateur />} />
-            <Route
-              path="organisateurs/create"
-              element={<CreateOrganisateur />}
-            />
-            <Route path="organisateurs/:id" element={<ShowOrganisateur />} />
-            <Route
-              path="organisateurs/:id/modifier"
-              element={<UpdateOrganisateur />}
-            />
+          <Route path="/evenements" element={<TousEvenements />} />
+          <Route path="/evenements/:id" element={<DetailEvenement />} />
 
-            <Route path="evenements" element={<ListEvenements />} />
-            <Route path="evenements/create" element={<CreateEvenement />} />
-            <Route path="evenements/:id" element={<ShowEvenement />} />
-            <Route path="evenements/:id/edit" element={<UpdateEvenement />} />
-           
+          <Route path="/favoris" element={<Favoris />} />
 
-            <Route path="lieux" element={<ListLieux />} />
-            <Route path="lieux/create" element={<CreateLieux />} />
-            <Route path="lieux/:id" element={<ShowLieux />} />
-            <Route path="lieux/:id/edit" element={<UpdateLieux />} />
+          <Route path="/paiement" element={<Paiement />} />
+          <Route path="/ticket/:id" element={<DetailTicket />} />
+          <Route path="/tickets" element={<HistoriqueTicket />} />
 
-            <Route path="tickets" element={<ListTicket />} />
-            <Route path="tickets/:id" element={<ShowTicket />} />
+          <Route path="/profil" element={<VueProfil />} />
+          <Route path="/profil/modifier" element={<UpdateProfil />} />
 
-            <Route path="categories" element={<ListCategories />} />
-            <Route path="categories/create" element={<CreateCategorie />} />
-            <Route path="categories/:id/edit" element={<UpdateCategorie />} />
+
+          {/* admin */}
+          <Route element={<PrivateRoute />}>
+            <Route path="/Admin" element={<AdminLayout />}>
+              <Route index path="Dashboard" element={<Dashboard />} />
+
+              <Route path="utilisateurs" element={<ListUtilisateur />} />
+              <Route path="utilisateurs/:id" element={<ShowUtilisateur />} />
+
+              <Route path="organisateurs" element={<ListOrganisateur />} />
+              <Route
+                path="organisateurs/create"
+                element={<CreateOrganisateur />}
+              />
+              <Route path="organisateurs/:id" element={<ShowOrganisateur />} />
+              <Route
+                path="organisateurs/:id/modifier"
+                element={<UpdateOrganisateur />}
+              />
+
+              <Route path="evenements" element={<ListEvenements />} />
+              <Route path="evenements/create" element={<CreateEvenement />} />
+              <Route path="evenements/:id" element={<ShowEvenement />} />
+              <Route path="evenements/:id/edit" element={<UpdateEvenement />} />
+
+
+              <Route path="lieux" element={<ListLieux />} />
+              <Route path="lieux/create" element={<CreateLieux />} />
+              <Route path="lieux/:id" element={<ShowLieux />} />
+              <Route path="lieux/:id/edit" element={<UpdateLieux />} />
+
+              <Route path="tickets" element={<ListTicket />} />
+              <Route path="tickets/:id" element={<ShowTicket />} />
+
+              <Route path="categories" element={<ListCategories />} />
+              <Route path="categories/create" element={<CreateCategorie />} />
+              <Route path="categories/:id/edit" element={<UpdateCategorie />} />
+            </Route>
           </Route>
-        </Route>
       </Routes>
     </BrowserRouter>
   );

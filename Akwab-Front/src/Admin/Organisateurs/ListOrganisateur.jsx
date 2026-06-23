@@ -63,7 +63,7 @@ export default function ListOrganisateur() {
           Liste des organisateurs
         </h1>
         <button
-          onClick={() => navigate("/admin/organisateurs/creer")}
+          onClick={() => navigate("/admin/organisateurs/create")}
           className="px-4 py-2 bg-purple-600 text-white text-sm font-semibold rounded-lg hover:bg-purple-700 transition-colors"
         >
           + Nouvel organisateur

@@ -4,61 +4,114 @@ import favoris from "../assets/icones/favorite.svg"
 import ticket from "../assets/icones/tickets.svg"
 import profil from "../assets/icones/account_circle.svg"
 import BoutonsNavigation from "./BoutonsNavigation"
-import TopBar from "./TopBar"
+import { Link, useNavigate } from "react-router-dom"
+import Footer from "./Footer"
 
 
 function HeaderLayout({ children }) {
+
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+
+    const handleLogout = () => {
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/login");
+    };
+
+
     return (
         <header>
 
             <aside id="logo-sidebar" className="hidden sm:block fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
                 <div className="h-full px-3 py-4 overflow-y-auto bg-[#05CDC2] opacity-[80%] ">
-                    <a href="https://flowbite.com/" className="flex items-center ps-2.5 mb-5">
-                        <img src={logo} className="w-[200px]" alt="Flowbite Logo" />
-                    </a>
+                    <Link to="" className="flex items-center ps-2.5 mb-5">
+                        <img src={logo} className="w-[200px]" alt="Akwab'Event Logo" />
+                    </Link>
 
                     <ul className="space-y-2 font-medium mt-[50px]">
                         <li>
-                            <a href="#" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                            <Link to="/accueil" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                 <img src={home} alt="icone-home" />
-                                <span className="ms-3 text-black font-bold">Accueil</span>
-                            </a>
+                                <span className="ms-3 text-gray-200 hover:text-purple-900 transition-colors font-bold">Accueil</span>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                            <Link to="/favoris" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                 <img src={favoris} alt="icone-favoris" />
-                                <span className="flex-1 ms-3 text-black font-bold">Favoris</span>
-                            </a>
+                                <span className="flex-1 ms-3 text-gray-200 hover:text-purple-900 transition-colors font-bold">Favoris</span>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                            <Link to="/tickets" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                 <img src={ticket} alt="icones-ticket" />
-                                <span className="flex-1 ms-3 text-black font-bold">Tickets</span>
-                            </a>
+                                <span className="flex-1 ms-3 text-gray-200 hover:text-purple-900 transition-colors font-bold">Tickets</span>
+                            </Link>
                         </li>
                         <li>
-                            <a href="#" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                            <Link to="/profil" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                 <img src={profil} alt="" />
-                                <span className="flex-1 ms-3 text-black font-bold">Profil</span>
-                            </a>
+                                <span className="flex-1 ms-3 text-gray-200 hover:text-purple-900 transition-colors font-bold">Profil</span>
+                            </Link>
                         </li>
 
                         <li className="mt-[150px] bg-[#4D027A] opacity-[80%] rounded-lg border border-2 border-black text-white ">
-                            <a href="#" className="flex items-center px-1.5 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
-                                <span className="flex-1 ms-3 text-center">Se connecter</span>
-                            </a>
+                            {token ? (
+
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full px-1.5 py-2 text-center"
+                                >
+                                    Se déconnecter
+                                </button>
+
+                            ) : (
+
+                                <Link
+                                    to="/login"
+                                    className="flex items-center px-1.5 py-2"
+                                >
+                                    <span className="flex-1 text-center">
+                                        Se connecter
+                                    </span>
+                                </Link>
+
+                            )}
                         </li>
                     </ul>
                 </div>
             </aside>
 
-            <TopBar/>
 
-            <main className="min-h-screen p-6 mt-20 sm:ml-64 flex flex-col items-center text-center">
+
+            <main className="min-h-screen bg-[#F0ECF1] p-6  sm:ml-64 flex flex-col ">
+
+                <div className="sm:hidden flex  justify-end px-4 pt-4">
+                    {token ? (
+                        <button onClick={handleLogout} className="px-4 py-2 bg-[#4D027A] text-white text-xs font-semibold rounded-lg shadow-md hover:bg-[#3a0260] transition-colors">
+                            Se déconnecter
+                        </button>
+                    ) : (
+                        <Link to="/login" className="px-4 py-2 bg-[#4D027A] text-white text-xs font-semibold rounded-full shadow-md hover:bg-[#3a0260] transition-colors">
+                            Se connecter
+                        </Link>
+                    )}
+                </div>
+
                 {children}
+
+
             </main>
 
-            <BoutonsNavigation/>
+            <section className=" bg-[#F0ECF1]  sm:ml-64 flex flex-col ">
+                <Footer />
+
+            </section>
+
+
+            <BoutonsNavigation />
 
         </header>
     );

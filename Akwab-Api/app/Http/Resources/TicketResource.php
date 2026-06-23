@@ -29,6 +29,10 @@ class TicketResource extends JsonResource
             'utilisateur' => $this->whenLoaded('utilisateur'),
             'type_ticket' => $this->whenLoaded('typeTicket'),
             'evenement'   => $this->whenLoaded('evenement'),
+            // 'id_evenement'       => $this->id_evenement,
+            // 'id_type_ticket'     => $this->id_type_ticket,
+
+        
         ];
     }
 }
