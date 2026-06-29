@@ -184,7 +184,7 @@ function Paiement() {
                 </div>
 
 
-                <button onClick={handlePaiement} disabled={loading} className="w-full py-3 bg-[#253C96] text-white font-bold text-sm rounded-xl hover:bg-[#19244E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <button data-cy="btn-payer" onClick={handlePaiement} disabled={loading} className="w-full py-3 bg-[#253C96] text-white font-bold text-sm rounded-xl hover:bg-[#19244E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {loading ? "Traitement en cours..." : `Payer ${total.toLocaleString()}F`}
                 </button>
             </div>

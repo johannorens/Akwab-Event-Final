@@ -93,7 +93,7 @@ function CardEvenement({ evenement, onUnlike }) {
         <div className="rounded-2xl shadow-xl overflow-hidden hover:shadow-lg transition-all bg-[#EDE0CE] text-start flex flex-col justify-between">
 
 
-            <div
+            <div data-cy="card-evenement"
                 className="h-40 w-full cursor-pointer bg-white overflow-hidden relative"
                 onClick={handleRedirection}
             >
@@ -163,7 +163,7 @@ function CardEvenement({ evenement, onUnlike }) {
                             </div>
 
                             <div id="donnees" className="flex justify-end items-center mt-5">
-                                <button
+                                <button data-cy="btn-reserver"
                                     onClick={handleRedirection}
                                     className="px-4 py-2 rounded-sm text-[12px] font-semibold bg-[#F36B2E] text-white"
                                 >

@@ -144,7 +144,7 @@ function DetailTicket() {
 
     return (
         <HeaderLayout>
-            <section className="mb-6 mx-auto px-4">
+            <section data-cy="ticket-card" className="mb-6 mx-auto px-4">
 
                 <div className="flex items-center lg:ml-[-200px] mb-3 pt-[50px]">
                     <button onClick={() => navigate(-1)} className="p-2 rounded-full hover:bg-gray-100">
@@ -261,7 +261,7 @@ function DetailTicket() {
 
                 <div id="donnees" className="flex justify-center lg:justify-end mb-4 items-center mt-5">
 
-                    <button onClick={handleDownload} className="px-4 py-2 rounded-sm text-[12px] text-end font-semibold bg-[#253C96] text-white hover:bg-[#D6ABEB] transition-all">
+                    <button data-cy="btn-download-ticket" onClick={handleDownload} className="px-4 py-2 rounded-sm text-[12px] text-end font-semibold bg-[#253C96] text-white hover:bg-[#D6ABEB] transition-all">
                         Télécharger mon ticket
                     </button>
                 </div>

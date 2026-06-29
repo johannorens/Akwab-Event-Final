@@ -218,7 +218,7 @@ function HistoriqueTicket() {
                 {!loading && ticketsFiltres.length > 0 && (
                     <div className="space-y-6 mt-10 mb-10">
                         {ticketsFiltres.map(ticket => (
-                            <div key={ticket.id}
+                            <div data-cy="ticket-card" key={ticket.id}
                                 className="bg-gray-50 p-4 sm:p-6 w-full max-w-xl rounded-xl">
 
                                 <div className="flex flex-col sm:flex-row gap-4">

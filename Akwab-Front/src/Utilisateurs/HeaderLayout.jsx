@@ -92,7 +92,7 @@ function HeaderLayout({ children }) {
 
                 <div className="sm:hidden flex  justify-end px-4 pt-4">
                     {token ? (
-                        <button onClick={handleLogout} className="px-4 py-2 bg-[#4D027A] text-white text-xs font-semibold rounded-lg shadow-md hover:bg-[#3a0260] transition-colors">
+                        <button data-cy="btn-logout" onClick={handleLogout} className="px-4 py-2 bg-[#4D027A] text-white text-xs font-semibold rounded-lg shadow-md hover:bg-[#3a0260] transition-colors">
                             Se déconnecter
                         </button>
                     ) : (

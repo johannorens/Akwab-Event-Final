@@ -288,7 +288,7 @@ function DetailEvenement() {
                                         <span className="w-6 text-center font-semibold text-sm">
                                             {qte}
                                         </span>
-                                        <button
+                                        <button data-cy="btn-increment"
                                             onClick={() => incrementer(type.id_type_ticket, restant)}
                                             className="w-7 h-7 rounded border border-[#253C96]
                                                 text-[#253C96] font-bold text-lg
@@ -332,7 +332,7 @@ function DetailEvenement() {
                                 <span>{calculerTotal().toLocaleString()}F</span>
                             </div>
 
-                            <button
+                            <button data-cy="btn-paiement"
                                 onClick={allerAuPaiement}
                                 className="w-full mt-4 py-3 bg-[#253C96] text-white
                                     font-bold text-sm rounded-xl
