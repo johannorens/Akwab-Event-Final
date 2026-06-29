@@ -13,8 +13,9 @@ export default function ListUtilisateur() {
     nom: "",
     prenoms: "",
     email: "",
-    password: "",
-    password_confirmation: "",
+    telephone: "",
+    mot_de_passe: "",
+    mot_de_passe_confirmation: "",
   });
   const [adminSaving, setAdminSaving] = useState(false);
   const [adminErrors, setAdminErrors] = useState({});
@@ -35,7 +36,7 @@ export default function ListUtilisateur() {
       });
       const data = await res.json();
       if (data.success) {
-        setUtilisateurs(data.data);
+        setUtilisateurs([...data.data].reverse());
       } else {
         setError("Impossible de charger les utilisateurs.");
       }
@@ -94,21 +95,23 @@ export default function ListUtilisateur() {
   async function handleAddAdmin(e) {
     e.preventDefault();
     setAdminErrors({});
-    if (adminForm.password !== adminForm.password_confirmation) {
+
+    if (adminForm.mot_de_passe !== adminForm.mot_de_passe_confirmation) {
       setAdminErrors({
-        password_confirmation: "Les mots de passe ne correspondent pas.",
+        mot_de_passe_confirmation: "Les mots de passe ne correspondent pas.",
       });
       return;
     }
+
     setAdminSaving(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/utilisateurs", {
+      const res = await fetch("http://127.0.0.1:8000/api/register/admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ ...adminForm, role: "admin" }),
+        body: JSON.stringify(adminForm),
       });
       const data = await res.json();
       if (data.success || res.ok) {
@@ -117,8 +120,9 @@ export default function ListUtilisateur() {
           nom: "",
           prenoms: "",
           email: "",
-          password: "",
-          password_confirmation: "",
+          telephone: "",
+          mot_de_passe: "",
+          mot_de_passe_confirmation: "",
         });
         fetchUtilisateurs();
         Swal.fire({
@@ -217,7 +221,6 @@ export default function ListUtilisateur() {
                   <tr
                     key={u.id}
                     className={`border-b border-gray-50 transition-colors ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}
-                    style={{}}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.backgroundColor = "#EEF1FB")
                     }
@@ -444,30 +447,45 @@ export default function ListUtilisateur() {
                 required
               />
 
+              <AdminField
+                label="Téléphone"
+                name="telephone"
+                type="tel"
+                value={adminForm.telephone}
+                onChange={(e) =>
+                  setAdminForm((p) => ({ ...p, telephone: e.target.value }))
+                }
+                error={adminErrors.telephone}
+                required
+              />
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <AdminField
                   label="Mot de passe"
-                  name="password"
+                  name="mot_de_passe"
                   type="password"
-                  value={adminForm.password}
+                  value={adminForm.mot_de_passe}
                   onChange={(e) =>
-                    setAdminForm((p) => ({ ...p, password: e.target.value }))
+                    setAdminForm((p) => ({
+                      ...p,
+                      mot_de_passe: e.target.value,
+                    }))
                   }
-                  error={adminErrors.password}
+                  error={adminErrors.mot_de_passe}
                   required
                 />
                 <AdminField
                   label="Confirmer"
-                  name="password_confirmation"
+                  name="mot_de_passe_confirmation"
                   type="password"
-                  value={adminForm.password_confirmation}
+                  value={adminForm.mot_de_passe_confirmation}
                   onChange={(e) =>
                     setAdminForm((p) => ({
                       ...p,
-                      password_confirmation: e.target.value,
+                      mot_de_passe_confirmation: e.target.value,
                     }))
                   }
-                  error={adminErrors.password_confirmation}
+                  error={adminErrors.mot_de_passe_confirmation}
                   required
                 />
               </div>

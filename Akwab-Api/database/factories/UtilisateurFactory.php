@@ -4,28 +4,26 @@ namespace Database\Factories;
 
 use App\Models\Utilisateur;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
-
-/**
- * @extends Factory<Utilisateur>
- */
 class UtilisateurFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Utilisateur::class;
+
     public function definition(): array
     {
         return [
-            'nom'  => $this->faker->lastName(),
-            'prenoms' => $this->faker->firstName(),
-            'email'   => $this->faker->unique()->safeEmail(),
-            'telephone' => $this->faker->phoneNumber(),
-            'mot_de_passe' => bcrypt('password'),
-            'id_role' => Role::inRandomOrder()->first()->id_role,
+            'nom'          => $this->faker->lastName(),
+            'prenoms'      => $this->faker->firstName(),
+            'email'        => $this->faker->unique()->safeEmail(),
+            'telephone'    => $this->faker->phoneNumber(),
+            'mot_de_passe' => Hash::make('Password@123'),
+            'id_role'      => 2,
         ];
+    }
+
+    public function admin(): static
+    {
+        return $this->state(['id_role' => 1]);
     }
 }

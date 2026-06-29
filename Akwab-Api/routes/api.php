@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\AimerController;
 // ROUTES PUBLIQUES
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/register/organisateur', [AuthController::class, 'registerOrganisateur']);
-Route::post('/register/admin', [AuthController::class, 'registerAdmin']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/evenements/populaires', [AimerController::class, 'populaires']);
@@ -55,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // ROUTES ADMIN SEULEMENT
     Route::middleware('admin')->group(function () {
+        Route::post('/register/admin', [AuthController::class, 'registerAdmin']);
         Route::apiResource('/organisateurs', OrganisateurController::class);
         Route::apiResource('/evenements', EvenementController::class)->except(['index', 'show']);
         Route::apiResource('/types-tickets', TypeTicketController::class)->except(['index', 'show']);
@@ -67,7 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         Route::post('/categories', [CategorieController::class, 'store']);
-        Route::post('/categories', [CategorieController::class, 'store']);      
+        Route::post('/categories', [CategorieController::class, 'store']);
         Route::post('/categories/{id}', [CategorieController::class, 'update']);
         Route::put('/categories/{id}', [CategorieController::class, 'update']);
         Route::delete('/categories/{id}', [CategorieController::class, 'destroy']);

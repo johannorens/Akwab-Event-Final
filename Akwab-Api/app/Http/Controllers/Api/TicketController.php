@@ -27,15 +27,11 @@ class TicketController extends Controller
             'evenement'
         ]);
 
-        // Filtre par événement
         if ($request->id_evenement) {
             $query->where('id_evenement', $request->id_evenement);
         }
 
-        // Gains totaux AVANT pagination
         $gains_total = (clone $query)->sum('prix_total');
-
-        // Pagination
         $tickets = $query->paginate(10);
 
         return response()->json([
