@@ -128,3 +128,4 @@ class TicketTest extends TestCase
         $this->assertEquals(30000, $ticket->prix_total);
     }
 }
+// test

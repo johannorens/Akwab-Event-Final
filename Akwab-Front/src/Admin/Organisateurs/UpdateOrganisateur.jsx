@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -18,7 +19,7 @@ export default function UpdateOrganisateur() {
   async function fetchOrganisateur() {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/organisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/organisateurs/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -57,7 +58,7 @@ export default function UpdateOrganisateur() {
     setFieldErrors({});
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/organisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/organisateurs/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +28,7 @@ export default function CreateOrganisateur() {
     setFieldErrors({});
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/organisateurs", {
+      const res = await fetch(API_URL + "/api/organisateurs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

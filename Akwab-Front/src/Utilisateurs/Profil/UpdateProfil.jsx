@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import HeaderLayout from "../HeaderLayout"
@@ -24,7 +25,7 @@ function UpdateProfil() {
     useEffect(() => {
         const fetchProfil = async () => {
             try {
-                const res = await fetch("http://127.0.0.1:8000/api/profile", {
+                const res = await fetch(API_URL + "/api/profile", {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,7 +94,7 @@ function UpdateProfil() {
         }
 
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/profileupdate", {
+            const res = await fetch(API_URL + "/api/profileupdate", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

@@ -99,3 +99,4 @@ class EvenementTest extends TestCase
         $this->assertEquals(0, $pivot->pivot->quantite_ticket_restante);
     }
 }
+// test

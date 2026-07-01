@@ -1,0 +1,41 @@
+FROM php:8.2-fpm-alpine
+
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN apk add --no-cache \
+    bash curl git unzip zip shadow linux-headers \
+    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev \
+    oniguruma-dev libzip-dev \
+    $PHPIZE_DEPS \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install pdo pdo_mysql bcmath opcache gd exif pcntl zip mbstring \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del $PHPIZE_DEPS \
+    && rm -rf /tmp/pear /var/cache/apk/*
+
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
+
+RUN { \
+    echo "error_reporting = E_ALL"; \
+    echo "display_errors = On"; \
+    echo "display_startup_errors = On"; \
+    echo "log_errors = On"; \
+    echo "memory_limit = 256M"; \
+    echo "upload_max_filesize = 64M"; \
+    echo "post_max_size = 64M"; \
+    echo "opcache.enable = 0"; \
+    } > /usr/local/etc/php/conf.d/custom-dev.ini
+
+RUN groupmod -g ${GROUP_ID} www-data \
+    && usermod -u ${USER_ID} -g www-data www-data
+
+WORKDIR /var/www/api
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE 9000
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]

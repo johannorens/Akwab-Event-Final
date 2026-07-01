@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +37,7 @@ export default function CreateLieux() {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/lieux", {
+      const res = await fetch(API_URL + "/api/lieux", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

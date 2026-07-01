@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import HeaderLayout from "../HeaderLayout";
@@ -19,7 +20,7 @@ function DetailCategorie() {
         const fetchDonnees = async () => {
             setLoading(true);
             try {
-                const repCategorie = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+                const repCategorie = await fetch(`${API_URL}/api/categories/${id}`, {
                     headers: { Accept: "application/json" }
                 }
                 );
@@ -28,7 +29,7 @@ function DetailCategorie() {
                 setCategorie(dataCategorie.data);
 
                 const repEvenements = await fetch(
-                    "http://127.0.0.1:8000/api/evenements", {
+                    API_URL + "/api/evenements", {
                     headers: { Accept: "application/json" }
                 }
                 );

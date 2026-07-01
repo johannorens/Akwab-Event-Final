@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../config/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/Image/logo.png";
@@ -14,7 +15,7 @@ export default function ForgotPassword() {
     setSuccess("");
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/forgot-password", {
+      const res = await fetch(API_URL + "/api/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

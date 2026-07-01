@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ export default function ShowLieux() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/lieux/${id}`, {
+        const res = await fetch(`${API_URL}/api/lieux/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -41,7 +42,7 @@ export default function ShowLieux() {
   async function handleDelete() {
     setDeleting(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/lieux/${id}`, {
+      const res = await fetch(`${API_URL}/api/lieux/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -186,7 +187,7 @@ export default function ShowLieux() {
     });
     if (!result.isConfirmed) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/lieux/${id}`, {
+      const res = await fetch(`${API_URL}/api/lieux/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

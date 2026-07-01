@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
@@ -19,7 +20,7 @@ function DetailTicket() {
                 const token = localStorage.getItem("token");
 
                 const response = await fetch(
-                    `http://127.0.0.1:8000/api/tickets/${id}`,
+                    `${API_URL}/api/tickets/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

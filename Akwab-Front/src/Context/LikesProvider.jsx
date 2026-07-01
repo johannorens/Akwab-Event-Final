@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../config/api";
 import { useEffect, useState } from "react";
 import { LikesContext } from "./LikesContext";
 
@@ -8,7 +9,7 @@ export function LikesProvider({ children }) {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        fetch("http://127.0.0.1:8000/api/mes-evenements-aimes", {
+        fetch(API_URL + "/api/mes-evenements-aimes", {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/json",
@@ -40,7 +41,7 @@ export function LikesProvider({ children }) {
 
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/api/evenements/${idEvenement}/aimer`,
+                `${API_URL}/api/evenements/${idEvenement}/aimer`,
                 {
                     method: "POST",
                     headers: {

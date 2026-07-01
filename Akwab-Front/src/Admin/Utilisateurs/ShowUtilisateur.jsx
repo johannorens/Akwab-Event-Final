@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -15,7 +16,7 @@ export default function ShowUtilisateur() {
   async function fetchUtilisateur() {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/utilisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/utilisateurs/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,

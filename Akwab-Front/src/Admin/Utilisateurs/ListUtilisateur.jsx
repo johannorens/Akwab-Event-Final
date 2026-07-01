@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -28,7 +29,7 @@ export default function ListUtilisateur() {
   async function fetchUtilisateurs() {
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/utilisateurs", {
+      const res = await fetch(API_URL + "/api/utilisateurs", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -60,7 +61,7 @@ export default function ListUtilisateur() {
     });
     if (!result.isConfirmed) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/utilisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/utilisateurs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
@@ -105,7 +106,7 @@ export default function ListUtilisateur() {
 
     setAdminSaving(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/register/admin", {
+      const res = await fetch(API_URL + "/api/register/admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

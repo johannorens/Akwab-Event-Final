@@ -1,7 +1,21 @@
+# Dependencies
 node_modules
-.env
-dist
 vendor
+
+# Environment
+.env
+.env.testing
+
+# Build output
+dist
+
+# Laravel cache/logs
+Akwab-Api/storage/logs/*.log
+Akwab-Api/bootstrap/cache/*.php
+
+# IDE
 .idea
 .vscode
+
+# Tests
 coverage

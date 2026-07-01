@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 
 
 import { useState } from "react"
@@ -39,7 +40,7 @@ function Paiement() {
         try {
 
             const response = await fetch(
-                "http://127.0.0.1:8000/api/tickets",
+                API_URL + "/api/tickets",
                 {
                     method: "POST",
                     headers: {

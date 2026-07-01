@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../config/api";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/Image/logo.png";
@@ -32,7 +33,7 @@ export default function Login() {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/login", {
+      const res = await fetch(API_URL + "/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, mot_de_passe: motDePasse }),

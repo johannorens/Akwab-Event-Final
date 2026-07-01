@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardEvenement from "../Evenements/CardEvenement";
@@ -18,7 +19,7 @@ function TousEvenements() {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/api/evenements?page=${page}`,
+                    `${API_URL}/api/evenements?page=${page}`,
                     { headers: { Accept: "application/json" } }
                 );
 
@@ -51,7 +52,7 @@ function TousEvenements() {
                 const token = localStorage.getItem("token");
 
                 const response = await fetch(
-                    "http://127.0.0.1:8000/api/categories",
+                    API_URL + "/api/categories",
                     {
                         method: "GET",
                         headers: {

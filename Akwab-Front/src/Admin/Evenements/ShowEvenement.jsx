@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -13,7 +14,7 @@ export default function ShowEvenement() {
   useEffect(() => {
     async function fetchEvenement() {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/evenements/${id}`, {
+        const res = await fetch(`${API_URL}/api/evenements/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         const data = await res.json();
@@ -41,7 +42,7 @@ export default function ShowEvenement() {
     });
     if (!result.isConfirmed) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/evenements/${id}`, {
+      const res = await fetch(`${API_URL}/api/evenements/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

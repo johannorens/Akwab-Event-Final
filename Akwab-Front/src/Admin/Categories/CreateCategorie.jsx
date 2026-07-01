@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +39,7 @@ export default function CreateCategorie() {
       formData.append("libelle", libelle);
       formData.append("image", imageFile);
 
-      const res = await fetch("http://127.0.0.1:8000/api/categories", {
+      const res = await fetch(API_URL + "/api/categories", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

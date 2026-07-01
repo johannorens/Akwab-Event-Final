@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -19,7 +20,7 @@ export default function ListOrganisateur() {
   async function fetchOrganisateurs() {
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/organisateurs", {
+      const res = await fetch(API_URL + "/api/organisateurs", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -41,7 +42,7 @@ export default function ListOrganisateur() {
   async function handleDelete(id) {
     setDeleting(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/organisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/organisateurs/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -79,7 +80,7 @@ export default function ListOrganisateur() {
     });
     if (!result.isConfirmed) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/organisateurs/${id}`, {
+      const res = await fetch(`${API_URL}/api/organisateurs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });

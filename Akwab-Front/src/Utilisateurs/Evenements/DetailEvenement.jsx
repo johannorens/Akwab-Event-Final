@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import arrow from "../../assets/icones/Arrowleft.svg"
 import { useNavigate, useParams } from "react-router-dom"
 import HeaderLayout from "../HeaderLayout"
@@ -30,7 +31,7 @@ function DetailEvenement() {
             try {
                 const token = localStorage.getItem("token");
 
-                const response = await fetch(`http://127.0.0.1:8000/api/evenements/${id}`, {
+                const response = await fetch(`${API_URL}/api/evenements/${id}`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,

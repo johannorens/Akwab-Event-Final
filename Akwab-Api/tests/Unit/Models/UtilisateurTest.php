@@ -66,3 +66,4 @@ class UtilisateurTest extends TestCase
         $this->assertIsObject($utilisateur->tickets ?? collect());
     }
 }
+// test

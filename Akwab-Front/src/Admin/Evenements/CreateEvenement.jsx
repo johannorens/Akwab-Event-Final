@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../config/api";
 
 const STEP_INFO = 1;
 const STEP_TICKETS = 2;
@@ -41,9 +42,11 @@ export default function CreateEvenement() {
       const headers = { Authorization: `Bearer ${token}` };
       try {
         const [lieuxRes, catsRes, orgsRes] = await Promise.all([
-          fetch("/api/lieux", { headers }).then((r) => r.json()),
-          fetch("/api/categories", { headers }).then((r) => r.json()),
-          fetch("/api/organisateurs", { headers }).then((r) => r.json()),
+          fetch(`${API_URL}/api/lieux`, { headers }).then((r) => r.json()),
+          fetch(`${API_URL}/api/categories`, { headers }).then((r) => r.json()),
+          fetch(`${API_URL}/api/organisateurs`, { headers }).then((r) =>
+            r.json(),
+          ),
         ]);
         setLieux(lieuxRes.data || lieuxRes);
         setCategories(catsRes.data || catsRes);
@@ -125,7 +128,7 @@ export default function CreateEvenement() {
     });
 
     try {
-      const res = await fetch("/api/evenements", {
+      const res = await fetch(`${API_URL}/api/evenements`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: fd,

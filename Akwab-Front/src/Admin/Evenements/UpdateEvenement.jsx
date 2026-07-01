@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -34,16 +35,16 @@ export default function UpdateEvenement() {
       const headers = { Authorization: `Bearer ${token}` };
       try {
         const [evRes, lieuxRes, catsRes, orgsRes] = await Promise.all([
-          fetch(`http://127.0.0.1:8000/api/evenements/${id}`, { headers }).then(
+          fetch(`${API_URL}/api/evenements/${id}`, { headers }).then(
             (r) => r.json(),
           ),
-          fetch("http://127.0.0.1:8000/api/lieux", { headers }).then((r) =>
+          fetch(API_URL + "/api/lieux", { headers }).then((r) =>
             r.json(),
           ),
-          fetch("http://127.0.0.1:8000/api/categories", { headers }).then((r) =>
+          fetch(API_URL + "/api/categories", { headers }).then((r) =>
             r.json(),
           ),
-          fetch("http://127.0.0.1:8000/api/organisateurs", { headers }).then(
+          fetch(API_URL + "/api/organisateurs", { headers }).then(
             (r) => r.json(),
           ),
         ]);
@@ -152,7 +153,7 @@ export default function UpdateEvenement() {
       fd.append(`tickets[${i}][quantite_type_ticket]`, t.quantite_type_ticket);
     });
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/evenements/${id}`, {
+      const res = await fetch(`${API_URL}/api/evenements/${id}`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: fd,

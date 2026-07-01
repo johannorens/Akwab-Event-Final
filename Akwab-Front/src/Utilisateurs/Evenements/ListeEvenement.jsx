@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import CardEvenement from "./CardEvenement"
@@ -13,7 +14,7 @@ function ListeEvenement({ filtreCategorie }) {
             try {
                 const token = localStorage.getItem("token");
 
-                const response = await fetch("http://127.0.0.1:8000/api/evenements", {
+                const response = await fetch(API_URL + "/api/evenements", {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,

@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -21,7 +22,7 @@ export default function UpdateCategorie() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+      const res = await fetch(`${API_URL}/api/categories/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
@@ -70,7 +71,7 @@ export default function UpdateCategorie() {
       // Laravel ne supporte pas PUT avec FormData — on utilise POST + _method
       formData.append("_method", "PUT");
 
-      const res = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+      const res = await fetch(`${API_URL}/api/categories/${id}`, {
         method: "POST", // POST avec _method=PUT pour le spoofing Laravel
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

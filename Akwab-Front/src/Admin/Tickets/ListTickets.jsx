@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +37,7 @@ export default function ListTickets() {
       const params = new URLSearchParams({ page });
       if (searchTerm) params.append("search", searchTerm);
       const res = await fetch(
-        `http://127.0.0.1:8000/api/evenements?${params}`,
+        `${API_URL}/api/evenements?${params}`,
         { headers },
       );
       const data = await res.json();
@@ -58,7 +59,7 @@ export default function ListTickets() {
       evs.map(async (ev) => {
         try {
           const res = await fetch(
-            `http://127.0.0.1:8000/api/tickets?page=1&id_evenement=${ev.id_evenement}`,
+            `${API_URL}/api/tickets?page=1&id_evenement=${ev.id_evenement}`,
             { headers },
           );
           const data = await res.json();

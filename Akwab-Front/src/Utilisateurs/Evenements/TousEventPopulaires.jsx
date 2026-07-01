@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardEvenement from "../Evenements/CardEvenement";
@@ -17,7 +18,7 @@ function TousEventPopulaires() {
             setLoading(true);
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/api/evenements/populaires?page=${page}`,
+                    `${API_URL}/api/evenements/populaires?page=${page}`,
                     { headers: { Accept: "application/json" } }
                 );
 

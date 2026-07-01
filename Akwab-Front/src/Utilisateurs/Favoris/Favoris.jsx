@@ -1,3 +1,4 @@
+﻿import { API_URL } from "../../config/api";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import CardEvenement from "../Evenements/CardEvenement"
@@ -45,7 +46,7 @@ function Favoris() {
 
             try {
                 const response = await fetch(
-                    "http://127.0.0.1:8000/api/mes-evenements-aimes",
+                    API_URL + "/api/mes-evenements-aimes",
                     {
                         headers: {
                             Accept: "application/json",
