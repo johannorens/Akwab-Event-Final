@@ -23,9 +23,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(RoleSeeder::class);
 
-        Role::create(['libelle' => 'admin']);
-        Role::create(['libelle' => 'Utilisateur']);
         Lieu::factory(10)->create();
         Categorie::factory(5)->create();
         Organisateur::factory(10)->create();
