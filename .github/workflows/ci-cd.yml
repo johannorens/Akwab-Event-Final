@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: akwab-api
+        working-directory: Akwab-Api
 
     services:
       mysql:
@@ -39,7 +39,7 @@ jobs:
           coverage: none
 
       - name: Copy .env
-        run: cp .env.example .env
+        run: cp .env.testing .env
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -104,15 +104,15 @@ jobs:
           extensions: mbstring, bcmath, pdo_mysql, redis, gd
 
       - name: Copy .env (api)
-        working-directory: akwab-api
-        run: cp .env.example .env
+        working-directory: Akwab-Api
+        run: cp .env.testing .env
 
       - name: Install Composer dependencies
-        working-directory: akwab-api
+        working-directory: Akwab-Api
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Generate app key
-        working-directory: akwab-api
+        working-directory: Akwab-Api
         run: php artisan key:generate
 
       - name: Wait for MySQL
@@ -123,7 +123,7 @@ jobs:
           done
 
       - name: Run migrations + seed
-        working-directory: akwab-api
+        working-directory: Akwab-Api
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
@@ -134,7 +134,7 @@ jobs:
         run: php artisan migrate --force --seed
 
       - name: Start Laravel server
-        working-directory: akwab-api
+        working-directory: Akwab-Api
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
@@ -150,20 +150,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: akwab-front/package-lock.json
+          cache-dependency-path: Akwab-Front/package-lock.json
 
       - name: Install npm dependencies
-        working-directory: akwab-front
+        working-directory: Akwab-Front
         run: npm install
 
       - name: Build frontend (pointé sur le back local)
-        working-directory: akwab-front
+        working-directory: Akwab-Front
         env:
           VITE_API_URL: http://127.0.0.1:8000
         run: npm run build
 
       - name: Serve frontend build
-        working-directory: akwab-front
+        working-directory: Akwab-Front
         run: npx serve -s dist -l 3000 &
 
       - name: Wait for servers
@@ -174,7 +174,7 @@ jobs:
       - name: Run Cypress
         uses: cypress-io/github-action@v6
         with:
-          working-directory: akwab-front
+          working-directory: Akwab-Front
           browser: chrome
           config: baseUrl=http://127.0.0.1:3000
 
@@ -183,7 +183,7 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: akwab-front/cypress/screenshots
+          path: Akwab-Front/cypress/screenshots
 
   docker-build-check:
     name: Docker Build Check
@@ -195,13 +195,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build api image
-        run: docker build -t akwab-api-check:latest ./akwab-api
+        run: docker build -f Akwab-Api/dockerfile.prod -t akwab-api-check:latest ./Akwab-Api
 
       - name: Build front image
         run: |
           docker build \
             --build-arg VITE_API_URL=https://placeholder-check.local \
-            -t akwab-front-check:latest ./akwab-front
+            -t akwab-front-check:latest ./Akwab-Front
 
   deploy-railway:
     name: Deploy to Railway
@@ -216,13 +216,13 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy api
-        working-directory: akwab-api
+        working-directory: Akwab-Api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: railway up --service back
 
       - name: Deploy front
-        working-directory: akwab-front
+        working-directory: Akwab-Front
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: railway up --service front
