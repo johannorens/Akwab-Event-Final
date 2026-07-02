@@ -16,14 +16,15 @@ class SuperAdminSeeder extends Seeder
     {
         $role = Role::where('libelle', 'Administrateur')->first();
 
-
-        Utilisateur::create([
-            'nom'          => 'Admin',
-            'prenoms'      => 'Super',
-            'email'        => 'admin@akwab.com',
-            'telephone'    => '00000000',
-            'mot_de_passe' => bcrypt('admin1234'),
-            'id_role'      => $role->id_role,
-        ]);
+        Utilisateur::firstOrCreate(
+            ['email' => 'admin@akwab.com'],
+            [
+                'nom'          => 'Admin',
+                'prenoms'      => 'Super',
+                'telephone'    => '00000000',
+                'mot_de_passe' => bcrypt('admin1234'),
+                'id_role'      => $role->id_role,
+            ]
+        );
     }
 }
