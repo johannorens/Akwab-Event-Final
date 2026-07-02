@@ -73,25 +73,3 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/categories/{id}', [CategorieController::class, 'destroy']);
     });
 });
-
-// test
-Route::post('/debug-login', function (\Illuminate\Http\Request $request) {
-    try {
-        // Remplace ceci par un appel à ta vraie logique de login,
-        // ou laisse ce test minimal pour voir si la DB répond
-        $user = \App\Models\User::where('email', $request->input('email'))->first();
-
-        return response()->json([
-            'step' => 'user_lookup',
-            'user_found' => $user ? true : false,
-        ]);
-    } catch (\Throwable $e) {
-        return response()->json([
-            'error' => true,
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => explode("\n", $e->getTraceAsString()),
-        ], 500);
-    }
-});
