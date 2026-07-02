@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 function BoutonsNavigation() {
     return (
         <nav className="fixed bottom-0 left-0 right-0 bg-[#C4E7E5] flex justify-around items-center py-3 sm:hidden">
-            <Link to="/accueil">
+            <Link to="/">
                 <img src={home} alt="icone-home" />
 
             </Link>

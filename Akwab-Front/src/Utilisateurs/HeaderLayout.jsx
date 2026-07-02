@@ -35,7 +35,7 @@ function HeaderLayout({ children }) {
 
                     <ul className="space-y-2 font-medium mt-[50px]">
                         <li>
-                            <Link to="/accueil" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                            <Link to="/" className="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                 <img src={home} alt="icone-home" />
                                 <span className="ms-3 text-gray-200 hover:text-[#F59A1E] transition-colors font-bold">Accueil</span>
                             </Link>

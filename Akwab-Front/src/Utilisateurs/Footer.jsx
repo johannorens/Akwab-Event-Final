@@ -32,7 +32,7 @@ function Footer() {
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link
-                                    to="/accueil"
+                                    to="/"
                                     className="flex items-center gap-2 text-gray-600 hover:text-[#253C96] transition">
                                     <img src={home} alt="Accueil" className="w-3 h-3" />
                                     <span>Accueil</span>
