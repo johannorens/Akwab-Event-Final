@@ -1,25 +1,31 @@
 #!/bin/sh
 set -e
 
-# Railway injecte le port via la variable d'env $PORT.
-# En local (docker compose), on peut définir un défaut.
+echo ">>> START.SH IS RUNNING <<<"
+
 export PORT="${PORT:-8080}"
 
-# Remplace ${PORT} dans le template nginx par la vraie valeur
+echo ">>> PORT IS: $PORT <<<"
+
 envsubst '${PORT}' < /etc/nginx/http.d/default.conf.template > /etc/nginx/http.d/default.conf
 
-# Régénère le cache de config/routes/vues MAINTENANT, au runtime,
-# quand les vraies variables d'environnement Railway sont disponibles.
-# On clear d'abord au cas où un vieux cache aurait été copié par erreur.
+echo ">>> NGINX CONFIG GENERATED <<<"
+
 cd /var/www/api
 
 php artisan config:clear
+echo ">>> CONFIG CLEARED <<<"
 php artisan route:clear
+echo ">>> ROUTE CLEARED <<<"
 php artisan view:clear
+echo ">>> VIEW CLEARED <<<"
 
 php artisan config:cache
+echo ">>> CONFIG CACHED <<<"
 php artisan route:cache
+echo ">>> ROUTE CACHED <<<"
 php artisan view:cache
+echo ">>> VIEW CACHED <<<"
 
-# Lance nginx + php-fpm ensemble via supervisord
+echo ">>> LAUNCHING SUPERVISORD <<<"
 exec supervisord -c /etc/supervisord.conf
