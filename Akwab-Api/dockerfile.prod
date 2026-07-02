@@ -17,8 +17,10 @@ FROM php:8.2-fpm-alpine
 
 RUN apk add --no-cache \
         bash curl unzip shadow nginx supervisor gettext \
+        libjpeg-turbo-dev freetype-dev libpng-dev libwebp-dev \
         $PHPIZE_DEPS \
-    && docker-php-ext-install pdo pdo_mysql bcmath opcache \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install pdo pdo_mysql bcmath opcache gd \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && apk del $PHPIZE_DEPS \
